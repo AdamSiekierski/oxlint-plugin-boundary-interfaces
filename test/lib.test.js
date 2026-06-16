@@ -18,13 +18,16 @@ test('stripExt drops extensions and /index', () => {
   assert.equal(stripExt('hooks/useX'), 'hooks/useX');
 });
 
-test('matchesPublic: exact, /* one level, /** any depth', () => {
-  const list = ['hooks/useGraphConfig', 'values/*', 'lib/**'];
+test('matchesPublic: exact, /* one level, /** any depth, mid-segment *', () => {
+  const list = ['hooks/useGraphConfig', 'values/*', 'lib/**', 'components/*Provider'];
   assert.equal(matchesPublic('hooks/useGraphConfig.ts', list), true);
   assert.equal(matchesPublic('hooks/useSecret', list), false);
   assert.equal(matchesPublic('values/source', list), true);
   assert.equal(matchesPublic('values/nested/deep', list), false); // /* is one level
   assert.equal(matchesPublic('lib/a/b/c', list), true); // /** is any depth
+  assert.equal(matchesPublic('components/SeriesDialogProvider.tsx', list), true); // suffix glob
+  assert.equal(matchesPublic('components/Dataset', list), false); // not a *Provider
+  assert.equal(matchesPublic('components/sub/FooProvider', list), false); // * stops at /
 });
 
 test('isInside', () => {

@@ -1,6 +1,6 @@
 {
   "name": "oxlint-plugin-boundary-interfaces",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "oxlint/ESLint plugin: a folder with an interface.json is a bounded context; outsiders may only import the paths it lists.",
   "type": "module",
   "main": "src/index.js",

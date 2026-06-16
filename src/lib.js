@@ -75,20 +75,24 @@ export function isInside(file, dir) {
   return rel === '' || (!rel.startsWith('..') && !path.isAbsolute(rel));
 }
 
-/** Does a context-relative path (no extension) match the public allow-list? Supports `/*` and `/**`. */
-export function matchesPublic(relPath, publicList) {
+/** Compile a glob entry to a RegExp: `*` matches within a path segment, `**` matches across `/`. */
+function entryToRegex(entry) {
+  const clean = stripExt(entry.replace(/\/+$/, ''));
+  const pattern = clean
+    .replace(/[.+^${}()|[\]\\]/g, '\\$&') // escape regex specials (not `*` or `/`)
+    .replace(/\*\*/g, '\0') // ** -> placeholder
+    .replace(/\*/g, '[^/]*') // * -> one segment
+    .replace(/\0/g, '.*'); // placeholder -> any depth
+  return new RegExp('^' + pattern + '$');
+}
+
+/** Does a context-relative path (no extension) match a single public entry? */
+export function matchesEntry(entry, relPath) {
   const p = stripExt(relPath).split(path.sep).join('/');
-  for (let entry of publicList) {
-    entry = entry.replace(/\/+$/, '');
-    if (entry.endsWith('/**')) {
-      const prefix = entry.slice(0, -3);
-      if (p === prefix || p.startsWith(prefix + '/')) return true;
-    } else if (entry.endsWith('/*')) {
-      const prefix = entry.slice(0, -2);
-      if (p.startsWith(prefix + '/') && !p.slice(prefix.length + 1).includes('/')) return true;
-    } else if (p === entry) {
-      return true;
-    }
-  }
-  return false;
+  return entryToRegex(entry).test(p);
+}
+
+/** Does a context-relative path match any entry in the public allow-list? */
+export function matchesPublic(relPath, publicList) {
+  return publicList.some((entry) => matchesEntry(entry, relPath));
 }

@@ -6,6 +6,7 @@ import {
   getAliases,
   isInside,
   loadJson,
+  matchesEntry,
   resolveSpecifier,
   stripExt,
 } from './lib.js';
@@ -64,11 +65,7 @@ for (const manifest of manifests) {
   const usedArr = [...used];
 
   for (const entry of publicList) {
-    const clean = entry.replace(/\/(\*\*?|)\s*$/, '');
-    const isGlob = entry.endsWith('/*') || entry.endsWith('/**');
-    const ok = isGlob
-      ? usedArr.some((u) => u === clean || u.startsWith(clean + '/'))
-      : used.has(stripExt(clean));
+    const ok = usedArr.some((u) => matchesEntry(entry, u));
     if (!ok) {
       problems++;
       console.warn(
