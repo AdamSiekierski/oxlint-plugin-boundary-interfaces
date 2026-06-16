@@ -25,5 +25,17 @@
     "bounded-context",
     "domain"
   ],
-  "license": "MIT"
+  "author": "Adam Siekierski",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AdamSiekierski/oxlint-plugin-boundary-interfaces.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AdamSiekierski/oxlint-plugin-boundary-interfaces/issues"
+  },
+  "homepage": "https://github.com/AdamSiekierski/oxlint-plugin-boundary-interfaces#readme",
+  "engines": {
+    "node": ">=18"
+  }
 }

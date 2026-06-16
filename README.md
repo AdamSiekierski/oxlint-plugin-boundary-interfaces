@@ -12,7 +12,7 @@ Generic: no hardcoded directory layout or alias. Import specifiers are resolved 
 ## The manifest — `interface.json`
 
 ```json
-{ "public": ["hooks/useGraphConfig", "values/*", "lib/**"] }
+{ "public": ["components/Button.tsx", "values/*", "lib/**"] }
 ```
 
 Paths are relative to the folder, without extension.
